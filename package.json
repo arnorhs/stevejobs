@@ -1,0 +1,30 @@
+{
+  "name": "stevejobs",
+  "version": "0.0.1",
+  "description": "Simplistic in-memory job/worker manager with rate limiting and custom worker counts",
+  "main": "stevejobs.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/arnorhs/stevejobs.git"
+  },
+  "keywords": [
+    "job",
+    "jobs",
+    "runners",
+    "workers",
+    "local",
+    "in-memory"
+  ],
+  "author": "Arnor Heidar Sigurdsson",
+  "license": "MIT",
+  "gitHead": "6e6e247dfd497b5255f40fa3d61e4969a5885d27",
+  "bugs": {
+    "url": "https://github.com/arnorhs/stevejobs/issues"
+  }
+}

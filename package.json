@@ -21,6 +21,9 @@
     "local",
     "in-memory"
   ],
+  "dependencies": {
+    "xtend": "2.x"
+  },
   "author": "Arnor Heidar Sigurdsson",
   "license": "MIT",
   "gitHead": "6e6e247dfd497b5255f40fa3d61e4969a5885d27",

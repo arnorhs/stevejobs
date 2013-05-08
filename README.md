@@ -1,10 +1,17 @@
+# stevejobs
+
 Simplistic in-memory job/worker manager with rate limiting and custom worker counts
 
-Install:
+## Warning: raw - this thing is just fresh and there are big things missing:
+
+- Handling errors with an error handler
+- Writing the actual tests
+
+## Install:
 
     npm install stevejobs
 
-Usage:
+## Usage:
     
     var SteveJobs = require('stevejobs');
 

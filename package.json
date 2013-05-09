@@ -1,6 +1,6 @@
 {
   "name": "stevejobs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Simplistic in-memory job/worker manager with rate limiting and custom worker counts",
   "main": "stevejobs.js",
   "directories": {
@@ -27,6 +27,9 @@
   ],
   "dependencies": {
     "xtend": "2.x"
+  },
+  "devDependencies": {
+    "mocha": "1.9.x"
   },
   "author": "Arnor Heidar Sigurdsson <arnorhs@gmail.com> (http://arnorhs.com/)",
   "license": "MIT",

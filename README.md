@@ -5,7 +5,6 @@ Simplistic in-memory job/worker manager with rate limiting and custom worker cou
 ### Warning: raw - this thing is just fresh and there are big things missing:
 
 - Handling errors with an error handler
-- Writing the actual tests
 
 ### Install:
 
@@ -13,6 +12,7 @@ Simplistic in-memory job/worker manager with rate limiting and custom worker cou
 
 ### Usage:
     
+    ```javascript
     var SteveJobs = require('stevejobs');
 
     var steve = new SteveJobs({
@@ -28,5 +28,17 @@ Simplistic in-memory job/worker manager with rate limiting and custom worker cou
     steve.addJob('do_something', myvar);
 
     steve.start();
+    ```
 
+### Running unit tests:
+
+    mocha test/
+
+### Todo:
+
+- It would be nice to add a generic error handler
+- It would be nice to have a callback get called when the queue is empty.
+- I would like to figure out a way to test the concurrency and delays - the only way I've teste is by just running and logging
+
+### pull requests are welcome
 That's it..

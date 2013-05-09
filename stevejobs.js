@@ -86,6 +86,7 @@ SteveJobs.prototype.start = function() {
 
 SteveJobs.prototype._run = function(i) {
     var steveJobs = this;
+    steveJobs._logger(steveJobs.jobs.length + " jobs remaining in the queue.");
     steveJobs._logger("Worker #" + i + " running...");
     var now = Date.now();
     this._work(function() {

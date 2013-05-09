@@ -39,6 +39,9 @@ steve.start();
 - It would be nice to add a generic error handler
 - It would be nice to have a callback get called when the queue is empty.
 - I would like to figure out a way to test the concurrency and delays - the only way I've teste is by just running and logging
+- Priority?
+- Continuing with the queue even though there are no moar jobs
+- Probably just returning a factory function instead of a class you need to instantiate
 
 ### pull requests are welcome
 That's it..

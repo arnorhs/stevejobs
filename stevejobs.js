@@ -49,34 +49,36 @@ SteveJobs.prototype.addHandler = function(name, handler) {
 
 SteveJobs.prototype._work = function(done) {
     var job = this.jobs.shift();
-    if (job) {
-        try {
-            var handler = this.handlers[job.name];
-            if (handler) { // no handler defined for this job type.. ignore.. maybe console out?
-                handler.call(null, done, job.data);
-            } else {
-                this._logger("No handler defined for", job.name);
-            }
-        } catch (err) {
-            // need to do this differently.. possibly by calling a
-            // independent error handler
-            this._logger("Exception when executing job:", job.name, job.data);
-            this._logger(err);
-            this._logger(err.stack);
-            // maybe... idunno
-            if (job.retries < this.options.maxRetries) {
-                this._logger("Retrying...");
-                job.retries++;
-                this.jobs.unshift(job);
-            } else {
-                this.errorHandler(err, job);
-            }
-            done();
+    if (!job) {
+        return done();
+    }
+
+    var handler = this.handlers[job.name];
+    if (!handler) { // no handler defined for this job type.. ignore.. maybe console out?
+        this._logger("No handler defined for", job.name);
+        return done();
+    }
+
+    // Wrap the call to the handler in a try catch block to catch any exception
+    // and call the error handler if there is one
+    try {
+        handler.call(null, done, job.data);
+    } catch (err) {
+        this._logger("Exception when executing job:", job.name, job.data);
+        this._logger(err);
+        this._logger(err.stack);
+
+        // we'll retry this job maxRetries times
+        if (job.retries < this.options.maxRetries) {
+            this._logger("Retrying...");
+            job.retries++;
+            this.jobs.unshift(job);
+        } else {
+            this.errorHandler(err, job);
         }
-    } else {
         done();
     }
-}
+};
 
 SteveJobs.prototype.start = function() {
     for (var i = 0; i < this.options.workers; i++) {

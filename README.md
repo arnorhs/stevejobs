@@ -13,9 +13,9 @@ Simplistic in-memory job/worker manager with rate limiting and custom worker cou
 ### Usage:
     
 ```javascript
-var SteveJobs = require('stevejobs');
+var steveJobs = require('stevejobs');
 
-var steve = new SteveJobs({
+var steve = steveJobs({
     delay: 4000, // ms
     workers: 3 // 3 concurrent workers
 });
@@ -41,7 +41,6 @@ steve.start();
 - I would like to figure out a way to test the concurrency and delays - the only way I've teste is by just running and logging
 - Priority?
 - Continuing with the queue even though there are no moar jobs
-- Probably just returning a factory function instead of a class you need to instantiate
 
 ### pull requests are welcome
 That's it..

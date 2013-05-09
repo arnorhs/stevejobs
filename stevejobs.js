@@ -5,6 +5,9 @@
 var xtend = require('xtend');
 
 function SteveJobs(options) {
+    if (!(this instanceof SteveJobs)) {
+        return new SteveJobs(options);
+    }
     this.options = xtend({
         delay: 5000,
         maxRetries: 3,

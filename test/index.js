@@ -7,7 +7,16 @@ var options = {
 };
 
 beforeEach(function() {
-    steve = new SteveJobs(options);
+    steve = SteveJobs(options);
+});
+
+// technically doesn't use the beforeEach, but whatever
+describe('instantiating without new', function() {
+    it('should be an instance of SteveJobs', function(done) {
+        var steve = SteveJobs();
+        assert(steve instanceof SteveJobs, "assigned variable is not an instance of steve jobs");
+        done();
+    });
 });
 
 describe('after adding a job the queue', function() {

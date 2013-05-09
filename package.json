@@ -21,6 +21,7 @@
     "runners",
     "queue",
     "queues",
+    "task",
     "worker",
     "workers",
     "local",

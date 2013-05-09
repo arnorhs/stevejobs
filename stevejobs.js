@@ -51,9 +51,9 @@ SteveJobs.prototype._work = function(done) {
         } catch (err) {
             // need to do this differently.. possibly by calling a
             // independent error handler
-            console.log("Exception when executing job:", job.name, job.data);
-            console.log(err);
-            console.log(err.stack);
+            this._logger("Exception when executing job:", job.name, job.data);
+            this._logger(err);
+            this._logger(err.stack);
             // maybe... idunno
             if (job.retries < this.options.maxRetries) {
                 steveJobs._logger("Retrying...");

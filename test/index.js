@@ -6,6 +6,7 @@ var options = {
     workers: 3 // 3 concurrent workers
 };
 
+var steve;
 beforeEach(function() {
     steve = SteveJobs(options);
 });

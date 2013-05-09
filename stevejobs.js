@@ -12,9 +12,16 @@ function SteveJobs(options) {
         delay: 5000,
         maxRetries: 3,
         workers: 2,
-        verbose: false
+        verbose: false,
+        errorHandler: function(err, job) {}
     }, options);
 
+    var sj = this;
+    this.errorHandler = function(err, job) {
+        sj._logger("Max retries reached on:", job.name, job.data);
+        sj._logger("Error: ", err);
+        sj.options.errorHandler.call(null, err, job);
+    }
     this.jobs = [];
     this.handlers = {};
     this.activeWorkers = 0;
@@ -32,6 +39,7 @@ SteveJobs.prototype.addJob = function(name, data) {
 SteveJobs.prototype.addHandler = function(name, handler) {
     if (this.handlers[name]) {
         // you really shouldn't ever do this.. ignore
+        throw new Error("Re-adding the same handler is not possible: " + name);
         return;
     }
 
@@ -56,11 +64,12 @@ SteveJobs.prototype._work = function(done) {
             this._logger(err.stack);
             // maybe... idunno
             if (job.retries < this.options.maxRetries) {
-                steveJobs._logger("Retrying...");
+                this._logger("Retrying...");
                 job.retries++;
                 this.jobs.unshift(job);
                 done();
             } else {
+                this.errorHandler.call(null, err, job);
                 done();
             }
         }

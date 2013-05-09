@@ -17,16 +17,17 @@ function SteveJobs(options) {
     }, options);
 
     var sj = this;
-    this.errorHandler = function(err, job) {
-        sj._logger("Max retries reached on:", job.name, job.data);
-        sj._logger("Error: ", err);
-        sj.options.errorHandler.call(null, err, job);
-    }
     this.jobs = [];
     this.handlers = {};
     this.activeWorkers = 0;
 }
 module.exports = SteveJobs;
+
+SteveJobs.prototype.errorHandler = function(err, job) {
+    this._logger("Max retries reached on:", job.name, job.data);
+    this._logger("Error: ", err);
+    this.options.errorHandler.call(null, err, job);
+};
 
 SteveJobs.prototype.addJob = function(name, data) {
     this._logger("Job added to queue:", name, data);
@@ -67,11 +68,10 @@ SteveJobs.prototype._work = function(done) {
                 this._logger("Retrying...");
                 job.retries++;
                 this.jobs.unshift(job);
-                done();
             } else {
-                this.errorHandler.call(null, err, job);
-                done();
+                this.errorHandler(err, job);
             }
+            done();
         }
     } else {
         done();

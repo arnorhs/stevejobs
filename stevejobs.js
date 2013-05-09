@@ -45,6 +45,8 @@ SteveJobs.prototype._work = function(done) {
             var handler = this.handlers[job.name];
             if (handler) { // no handler defined for this job type.. ignore.. maybe console out?
                 handler.call(null, done, job.data);
+            } else {
+                this._logger("No handler defined for", job.name);
             }
         } catch (err) {
             // need to do this differently.. possibly by calling a
@@ -57,6 +59,9 @@ SteveJobs.prototype._work = function(done) {
                 steveJobs._logger("Retrying...");
                 job.retries++;
                 this.jobs.unshift(job);
+                done();
+            } else {
+                done();
             }
         }
     } else {

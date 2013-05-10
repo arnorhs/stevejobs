@@ -25,6 +25,9 @@ steve.addJob('do_something', myvar);
 
 steve.start();
 ```
+### SteveJobs server
+
+If you want to run a simple http server to receive job requests, you can use the [https://github.com/arnorhs/stevejobs-server](SteveJobs Server) wrapper to take care of those annoyances.
 
 ### Running unit tests:
 

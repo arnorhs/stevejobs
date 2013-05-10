@@ -2,7 +2,8 @@
  * simple job queue that limits to only one thing running at
  * a time.. (there are just too many modules to choose from)
  */
-var xtend = require('xtend');
+var xtend = require('xtend'),
+    util = require('util');
 
 function SteveJobs(options) {
     if (!(this instanceof SteveJobs)) {
@@ -32,7 +33,7 @@ SteveJobs.prototype.errorHandler = function(err, job) {
 SteveJobs.prototype.addJob = function(name, data) {
     this._logger("Job added to queue:", name, data);
     if (!name || typeof data === 'undefined' || data === null) {
-        throw new Error("Job called with no data! " + name + " -> data");
+        throw new Error("Job called with no name or data! " + name + " -> " + util.inspect(data));
     }
     this.jobs.push({name: name, data: data, retries: 0});
 };

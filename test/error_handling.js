@@ -32,4 +32,26 @@ describe('an unhandled exception in a handler', function() {
     });
 });
 
+describe('adding a job', function() {
+    var steve;
+    beforeEach(function() {
+        steve = SteveJobs();
+    });
+    it('should throw an error when you pass in no name', function(done) {
+        try {
+            steve.addJob('', {});
+        } catch (err) {
+            return done();
+        }
+        assert(false, "No error thrown!");
+    });
+    it('should throw an error when you pass in no data', function(done) {
+        try {
+            steve.addJob('a name', null);
+        } catch (err) {
+            return done();
+        }
+        assert(false, "No error thrown!");
+    });
+});
 

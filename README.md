@@ -52,13 +52,13 @@ steve.start();
 
 ### Function reference:
 
-`SteveJobs#addJob(name, data)`
+#### SteveJobs#addJob(name, data)
 Adds a new job to the queue. The name can be any string/number and the data parameter can be any type, as long as your corresponding handler knows what to do with it. Currently this method does not support multiple parameters, so you're going to have to pass in an array, an object or something like that if you want to pass in multiple vars.
 
-`SteveJobs#addHandler(name, callback(done, data))`
+#### SteveJobs#addHandler(name, callback(done, data))
 Adds a new job handler for a given name. Adding multiple handlers results in an error. The callback will be given two parameters, a callback you need to call when your handler is done executing, and the data parameter you passed in in the `addJob()` method. If you don't call that callback, the corresponding worker will stop and not continue unless you restart the server.
 
-`SteveJobs#start()`
+#### SteveJobs#start()
 You call this method to start the worker loop. Until this has been called, no work will be done.
 
 ### Todo:

@@ -58,7 +58,9 @@ steve.start();
 
 ### Todo:
 
-- It would be nice to have a callback get called when the queue is empty.
+- Better way to call/set an error event - probably using EventEmitter
+- Better way to do logging, if you have custom logging needs. Maybe by using EventEmitter to trigger a `'log'` event
+- Adding add-to-queue and read-from-queue hooks for hooking in different types of databases to read from the queue etc.
 - I would like to figure out a way to test the concurrency and delays - the only way I've teste is by just running and logging
 - Priority?
 

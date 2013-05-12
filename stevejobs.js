@@ -39,16 +39,16 @@ SteveJobs.prototype.errorHandler = function(err, job) {
             "    Error: " +
             err.stack;
     });
-    this.options.errorHandler.call(null, err, job);
+    this.emit('job_error', err, job);
 };
 
 SteveJobs.prototype.addJob = function(name, data) {
+    if (!name) {
+        throw new Error("Job added with no name!");
+    }
     this._logger(logLevel.low, function() {
         return "Job added to queue:" + name + ", data: " + JSON.stringify(data);
     });
-    if (!name || typeof data === 'undefined' || data === null) {
-        throw new Error("Job called with no name or data! " + name + " -> " + util.inspect(data));
-    }
     this.jobs.push({name: name, data: data, retries: 0});
 };
 

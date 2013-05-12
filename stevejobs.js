@@ -99,8 +99,7 @@ SteveJobs.prototype.start = function() {
 
 SteveJobs.prototype._run = function(i) {
     var steveJobs = this;
-    steveJobs._logger(logLevel.low, "Jobs remaining: " + steveJobs.jobs.length);
-    steveJobs._logger(logLevel.low, "Worker #" + i + " running...");
+    steveJobs._logger(logLevel.low, "Worker #" + i + " running | remaining jobs: " + steveJobs.jobs.length);
     var now = Date.now();
     this._work(function() {
         steveJobs._logger(logLevel.low, "Worker #" + i + " done in " + (Date.now() - now) + "ms.");

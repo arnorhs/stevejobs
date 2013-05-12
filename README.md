@@ -1,9 +1,9 @@
-## stevejobs
+## SteveJobs
 
-Simplistic in-memory job/worker manager with rate limiting and custom worker counts. (Status: experimental, young proj).
+Simple in-memory job/worker manager with rate limiting and custom worker counts. (Status: experimental)
 
 This is a small library that aids in executing long-running processes outside of your other events. It has no underlying backing store, so
-it's mostly useful for fire-and-forget tasks like updating caches, sending out non-important emails etc.
+it's mostly useful for fire-and-forget tasks like crawling & scraping, updating caches, sending out non-important emails etc.
 
 The plan is to add hooks for you to easily manage how it reads and writes to the queue, so you could use any kind of a backing store you see fit.
 

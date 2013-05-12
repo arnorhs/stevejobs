@@ -6,6 +6,12 @@ var xtend = require('xtend'),
     util = require('util'),
     EventEmitter = require('events').EventEmitter;
 
+var logLevel = {
+    low: 0,
+    medium: 1,
+    high: 2
+};
+
 function SteveJobs(options) {
     if (!(this instanceof SteveJobs)) {
         return new SteveJobs(options);
@@ -27,13 +33,19 @@ module.exports = SteveJobs;
 util.inherits(SteveJobs, EventEmitter);
 
 SteveJobs.prototype.errorHandler = function(err, job) {
-    this._logger("Max retries reached on:", job.name, job.data);
-    this._logger("Error: ", err);
+    this._logger(logLevel.high, function() {
+        return "Max retries reached on: " +
+            JSON.stringify(job.data) + "\n" +
+            "    Error: " +
+            err.stack;
+    });
     this.options.errorHandler.call(null, err, job);
 };
 
 SteveJobs.prototype.addJob = function(name, data) {
-    this._logger("Job added to queue:", name, data);
+    this._logger(logLevel.low, function() {
+        return "Job added to queue:" + name + ", data: " + JSON.stringify(data);
+    });
     if (!name || typeof data === 'undefined' || data === null) {
         throw new Error("Job called with no name or data! " + name + " -> " + util.inspect(data));
     }
@@ -58,7 +70,7 @@ SteveJobs.prototype._work = function(done) {
 
     var handler = this.handlers[job.name];
     if (!handler) { // no handler defined for this job type.. ignore.. maybe console out?
-        this._logger("No handler defined for", job.name);
+        this._logger(logLevel.low, "No handler defined for: " + job.name);
         return done();
     }
 
@@ -67,13 +79,15 @@ SteveJobs.prototype._work = function(done) {
     try {
         handler.call(null, done, job.data);
     } catch (err) {
-        this._logger("Exception when executing job:", job.name, job.data);
-        this._logger(err);
-        this._logger(err.stack);
+        this._logger(logLevel.high, function() {
+            return "Exception when executing job: " + job.name +
+            ", data: " + JSON.stringify(job.data) + "\n" +
+            "    " + err.stack;
+        });
 
         // we'll retry this job maxRetries times
         if (job.retries < this.options.maxRetries) {
-            this._logger("Retrying...");
+            this._logger(logLevel.medium, "Retrying...");
             job.retries++;
             this.jobs.unshift(job);
         } else {
@@ -91,11 +105,11 @@ SteveJobs.prototype.start = function() {
 
 SteveJobs.prototype._run = function(i) {
     var steveJobs = this;
-    steveJobs._logger(steveJobs.jobs.length + " jobs remaining in the queue.");
-    steveJobs._logger("Worker #" + i + " running...");
+    steveJobs._logger(logLevel.low, "Jobs remaining: " + steveJobs.jobs.length);
+    steveJobs._logger(logLevel.low, "Worker #" + i + " running...");
     var now = Date.now();
     this._work(function() {
-        steveJobs._logger("Worker #" + i + " done in " + (Date.now() - now) + "ms.");
+        steveJobs._logger(logLevel.low, "Worker #" + i + " done in " + (Date.now() - now) + "ms.");
         // maybe it would be better to use process.nextTick() when the delay is 0
         setTimeout(function() {
             steveJobs._run(i);
@@ -103,7 +117,19 @@ SteveJobs.prototype._run = function(i) {
     });
 };
 
-SteveJobs.prototype._logger = function() {
-    Array.prototype.unshift.call(arguments, Date.now());
-    this.emit.apply(this, arguments);
+SteveJobs.prototype._logger = function(logLevel, str) {
+    this.emit('log', {
+        time: new Date(),
+        getMessage: function() {
+            // we do it this way, so that if the logging event requires any
+            // messy business, it will be more efficient, like when it needs
+            // to stringify an object
+            if (typeof str === 'function') {
+                return str();
+            }
+            return str;
+        },
+        level: logLevel
+    });
 }
+

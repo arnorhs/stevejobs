@@ -20,8 +20,7 @@ function SteveJobs(options) {
     this.options = xtend({
         delay: 5000,
         maxRetries: 3,
-        workers: 2,
-        errorHandler: function(err, job) {}
+        workers: 2
     }, options);
 
     var sj = this;

@@ -14,17 +14,17 @@ describe('an unhandled exception in a handler', function() {
         var jobName = 'do_something',
             customString = "Custom string",
             handler = function(done, myVar) {
-                // this is a bit ugly.. not sure how to handle
+                // our fake error to trigger the error event
                 throw new Error("Error in handler");
                 done();
             },
             steve = SteveJobs({
                 delay: 20,
-                workers: 1,
-                errorHandler: function(err, job) {
-                    // it's done handler, to be clear
-                    done();
-                }
+                workers: 1
+            });
+            steve.on('job_error', function(err, job) {
+                // "it"s done callback, to be clear
+                done();
             });
         steve.addJob(jobName, customString);
         steve.addHandler(jobName, handler);

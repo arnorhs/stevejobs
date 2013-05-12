@@ -53,12 +53,7 @@ SteveJobs.prototype.addJob = function(name, data) {
 };
 
 SteveJobs.prototype.addHandler = function(name, handler) {
-    if (this.handlers[name]) {
-        // you really shouldn't ever do this.. ignore
-        throw new Error("Re-adding the same handler is not possible: " + name);
-        return;
-    }
-
+    // if set again, will override last one
     this.handlers[name] = handler;
 }
 

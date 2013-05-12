@@ -3,17 +3,18 @@
  * a time.. (there are just too many modules to choose from)
  */
 var xtend = require('xtend'),
-    util = require('util');
+    util = require('util'),
+    EventEmitter = require('events').EventEmitter;
 
 function SteveJobs(options) {
     if (!(this instanceof SteveJobs)) {
         return new SteveJobs(options);
     }
+    EventEmitter.call(this);
     this.options = xtend({
         delay: 5000,
         maxRetries: 3,
         workers: 2,
-        verbose: false,
         errorHandler: function(err, job) {}
     }, options);
 
@@ -23,6 +24,7 @@ function SteveJobs(options) {
     this.activeWorkers = 0;
 }
 module.exports = SteveJobs;
+util.inherits(SteveJobs, EventEmitter);
 
 SteveJobs.prototype.errorHandler = function(err, job) {
     this._logger("Max retries reached on:", job.name, job.data);
@@ -102,8 +104,6 @@ SteveJobs.prototype._run = function(i) {
 };
 
 SteveJobs.prototype._logger = function() {
-    if (this.options.verbose) {
-        arguments[0] = "-> " + arguments[0];
-        console.log.apply(console, arguments);
-    }
+    Array.prototype.unshift.call(arguments, Date.now());
+    this.emit.apply(this, arguments);
 }

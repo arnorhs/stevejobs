@@ -30,7 +30,7 @@ var steve = steveJobs({
 });
 
 steve.addHandler('do_something', function(done, myvars) {
-    // do something here
+    // do something here - make sure to call done when your task is done
     done();
 });
 
@@ -38,6 +38,27 @@ steve.addJob('do_something', myvar);
 
 steve.start();
 ```
+### Logging:
+
+The module doesn't output anything by default. To log to console, you can hook into the 'log' event:
+
+The object passed in has the following properties: `time` (Date object), `getMessage` (function to get the log message), `level` (number range 0-2 dictating severity)
+
+```javascript
+steve.on('log', function(loginfo) {
+    console.log(loginfo.time, loginfo.getMessage());
+});
+```
+
+### Error handling
+
+Not much in terms of error handling as is. The job will be retried a few times, and then if it fails again, this event will be emitted, allowing you to take action..
+```javascript
+steve.on('job_error', function(err, job) {
+    // the job variable has the data, how many times it was retried and its name.
+});
+```
+
 ### Running unit tests:
 
     mocha test/
@@ -47,8 +68,6 @@ steve.start();
 - `delay`: Time in milliseconds that a worker waits for before starting on the next job.
 - `maxRetries`: How often a job will be retried on error before being abandoned.
 - `workers`: Number of worker loops that can be executing job handlers concurrently.
-- `verbose`: Outputs more information to console.log -- this will probably be changed to a custom log event later.
-- `errorHandler`: A function callback that will be called if maxRetries is reached on a job. It accepts two parameters, name of job and the data passed in. -- this will probably be moved to a custom event.
 
 ### Function reference:
 
@@ -63,8 +82,6 @@ You call this method to start the worker loop. Until this has been called, no wo
 
 ### Todo:
 
-- Better way to call/set an error event - probably using EventEmitter
-- Better way to do logging, if you have custom logging needs. Maybe by using EventEmitter to trigger a `'log'` event
 - Adding add-to-queue and read-from-queue hooks for hooking in different types of databases to read from the queue etc.
 - I would like to figure out a way to test the concurrency and delays - the only way I've teste is by just running and logging
 - Priority?

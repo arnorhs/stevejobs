@@ -1,6 +1,6 @@
 {
   "name": "stevejobs",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Simplistic in-memory job/worker manager with rate limiting and custom worker counts",
   "main": "stevejobs.js",
   "homepage": "https://github.com/arnorhs/stevejobs",

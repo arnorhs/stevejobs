@@ -95,3 +95,43 @@ describe('after running the jobs', function() {
     });
 });
 
+describe('after stopping', function() {
+    var jobName = 'do_something',
+        customString = "Custom string",
+        handler = function(handlerDone, myVar) {
+            // maybe it's counter productive to check the internal var, if there's a double bug (maybe add another test)
+            assert(steve.running, "Handler should not be called if instance is not running");
+            handlerDone();
+        };
+    beforeEach(function() {
+        steve.addHandler(jobName, handler);
+        steve.start(); // start will basically execute a job for each worker sync in this case
+    });
+    describe('the running flag', function() {
+        it('should be false after stopping', function(done) {
+            steve.stop();
+            assert(!steve.running, "Running flag should be false");
+            done();
+        });
+    });
+    describe('the timers', function() {
+        it('should have 0 keys after stopping', function(done) {
+            steve.stop();
+            assert(Object.keys(steve.timers).length === 0, "Running flag should be false");
+            done();
+        });
+    });
+    describe('the job', function() {
+        it('should not get executed', function(done) {
+            // add enough jobs for 3 workers...
+            for (var i = 0; i < 20; i++) {
+                steve.addJob(jobName, customString);
+            }
+            steve.stop();
+            setTimeout(function() {
+                done();
+            }, steve.options.delay * 2); // should be sufficient time for the test case
+        });
+    });
+});
+

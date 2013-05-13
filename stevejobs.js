@@ -92,6 +92,8 @@ SteveJobs.prototype._work = function(done) {
 };
 
 SteveJobs.prototype.start = function() {
+    this.running = true;
+    this.timers = {};
     for (var i = 0; i < this.options.workers; i++) {
         this._run(i);
     }
@@ -103,12 +105,29 @@ SteveJobs.prototype._run = function(i) {
     var now = Date.now();
     this._work(function() {
         steveJobs._logger(logLevel.low, "Worker #" + i + " done in " + (Date.now() - now) + "ms.");
+        if (!steveJobs.running) return;
         // maybe it would be better to use process.nextTick() when the delay is 0
-        setTimeout(function() {
+        steveJobs.timers[i] = setTimeout(function() {
             steveJobs._run(i);
         }, steveJobs.options.delay);
     });
 };
+
+/*
+ * Stops all workers by cancelling timers and setting a boolean to false.
+ *
+ * Right now this function is pretty dumb, since there could be an async job going on
+ * and once it finishes, it will just check the boolean. So it might finish after the
+ * stop() method has finished, where you'd probably want to know, so we'd prefer
+ * if there was a callback that would get called...  TODO
+ */
+SteveJobs.prototype.stop = function() {
+    this.running = false;
+    for (var key in this.timers) {
+        clearTimeout(this.timers[key]);
+    }
+    this.timers = {};
+}
 
 SteveJobs.prototype._logger = function(logLevel, str) {
     this.emit('log', {

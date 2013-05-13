@@ -25,7 +25,6 @@ function SteveJobs(options) {
 
     this.jobs = [];
     this.handlers = {};
-    this.activeWorkers = 0;
 }
 module.exports = SteveJobs;
 util.inherits(SteveJobs, EventEmitter);

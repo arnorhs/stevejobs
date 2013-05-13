@@ -63,9 +63,9 @@ SteveJobs.prototype._work = function(done) {
     } catch (err) {
         // we'll retry this job maxRetries times
         if (job.retries < this.options.maxRetries) {
-            this._logger(logLevel.medium, "Error in executing job, retrying...");
+            this._logger(logLevel.medium, "Error in executing job, adding to end of queue...");
             job.retries++;
-            this.jobs.unshift(job);
+            this.jobs.push(job);
         } else {
             this._logger(logLevel.high, "Error in executing job, max retries reached");
             this.emit('job_error', err, job);

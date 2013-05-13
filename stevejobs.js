@@ -29,16 +29,6 @@ function SteveJobs(options) {
 module.exports = SteveJobs;
 util.inherits(SteveJobs, EventEmitter);
 
-SteveJobs.prototype.errorHandler = function(err, job) {
-    this._logger(logLevel.high, function() {
-        return "Max retries reached on: " +
-            JSON.stringify(job.data) + "\n" +
-            "    Error: " +
-            err.stack;
-    });
-    this.emit('job_error', err, job);
-};
-
 SteveJobs.prototype.addJob = function(name, data) {
     if (!name) {
         throw new Error("Job added with no name!");
@@ -71,19 +61,14 @@ SteveJobs.prototype._work = function(done) {
     try {
         handler.call(null, done, job.data);
     } catch (err) {
-        this._logger(logLevel.high, function() {
-            return "Exception when executing job: " + job.name +
-            ", data: " + JSON.stringify(job.data) + "\n" +
-            "    " + err.stack;
-        });
-
         // we'll retry this job maxRetries times
         if (job.retries < this.options.maxRetries) {
-            this._logger(logLevel.medium, "Retrying...");
+            this._logger(logLevel.medium, "Error in executing job, retrying...");
             job.retries++;
             this.jobs.unshift(job);
         } else {
-            this.errorHandler(err, job);
+            this._logger(logLevel.high, "Error in executing job, max retries reached");
+            this.emit('job_error', err, job);
         }
         done();
     }

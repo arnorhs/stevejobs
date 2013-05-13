@@ -23,7 +23,6 @@ function SteveJobs(options) {
         workers: 2
     }, options);
 
-    var sj = this;
     this.jobs = [];
     this.handlers = {};
     this.activeWorkers = 0;

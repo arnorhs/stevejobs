@@ -42,7 +42,7 @@ SteveJobs.prototype.addJob = function(name, data) {
 SteveJobs.prototype.addHandler = function(name, handler) {
     // if set again, will override last one
     this.handlers[name] = handler;
-}
+};
 
 SteveJobs.prototype._work = function(done) {
     var job = this.jobs.shift();
@@ -80,7 +80,7 @@ SteveJobs.prototype.start = function() {
     for (var i = 0; i < this.options.workers; i++) {
         this._run(i);
     }
-}
+};
 
 SteveJobs.prototype._run = function(i) {
     var steveJobs = this;
@@ -110,7 +110,7 @@ SteveJobs.prototype.stop = function() {
         clearTimeout(this.timers[key]);
     }
     this.timers = {};
-}
+};
 
 SteveJobs.prototype._logger = function(logLevel, str) {
     this.emit('log', {
@@ -126,5 +126,5 @@ SteveJobs.prototype._logger = function(logLevel, str) {
         },
         level: logLevel
     });
-}
+};
 
